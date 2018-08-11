@@ -314,7 +314,23 @@ bintray {
     key = findProperty("bintrayApiKey")
     publish = true
     dryRun = (findProperty('dryRun') ?: 'true').toBoolean()
-    configurations =  ['archives']
+
+    if (findProperty('bintrayUseExisting')) {
+        filesSpec {
+            from 'build/libs'
+            from 'build/poms'
+            into '.'
+            rename { file ->
+                if (file =~ /^pom/)
+                    return "$project.name-${version}.pom"
+                else
+                    return file
+            }
+        }
+    } else {
+        configurations =  ['archives']
+    }
+
     pkg {
         repo = 'maven'
         name = archivesBaseName

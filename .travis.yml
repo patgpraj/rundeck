@@ -13,7 +13,7 @@ stages:
 - name: test
   if: fork = false
 - name: snapshot release
-  if: fork = false AND type = push AND (branch = master OR env(RUNDECK_RELEASE) IS present) AND tag IS blank
+  # if: fork = false AND type = push AND (branch = master OR env(RUNDECK_RELEASE) IS present) AND tag IS blank
 - name: tag release
   if: fork = false AND type = push AND tag =~ ^v
 - name: fork
@@ -53,12 +53,8 @@ jobs:
     - mkdir -p artifacts/packaging
     - mkdir -p artifacts/rundeckapp/build
 
-    - find ./packaging -regex '.*\.\(deb\|rpm\)' -exec cp --parents {} artifacts \;
-    - cp -r --parents core/build/libs artifacts/
-    - cp -r --parents rundeckapp/**/build/libs artifacts/
-    - cp -r --parents rundeck-storage/**/build/libs artifacts/
     # Sync artifacts and trigger downstream snapshot builds if appropriate
-    - script_block 'sync-artifacts' sync_to_s3
+    - script_block 'sync-artifacts' 'copy_artifacts && sync_to_s3'
     - script_block 'trigger.downstream' trigger_downstream_snapshots
 
     # Trigger rundeck/testdeck build
@@ -145,8 +141,7 @@ jobs:
     # Publish official docker snapshot
     - script_block 'docker.official' 'docker_login && ./gradlew -g gradle-cache officialPush'
     # Upload to sonatype
-    # - export RELEASE_OPTS="-Psigning.keyId=${RUNDECK_SIGNING_KEYID} -Psigning.password=${RUNDECK_SIGNING_PASSWORD} -PsonatypeUsername=${SONATYPE_USERNAME} -PsonatypePassword=${SONATYPE_PASSWORD} -Poss-releases.username=${OSS_RELEASES_USERNAME} -Poss-releases.password=${OSS_RELEASES_PASSWORD} -Poss-releases.url=https://oss.sonatype.org/index.html#stagingRepositories -Psigning.secretKeyRingFile=$(pwd)/ci-resources/secring.gpg"
-    # - script_block 'build.artifacts' 'bash jenkins-build.sh upload SNAPSHOT'
+    - script_block 'oss.publish' './gradlew uploadExisting -PsonatypeUsername="${SONATYPE_USERNAME}" -PsonatypePassword="${SONATYPE_PASSWORD}"'
 
   # Stage: tag release publishes artifacts to the appropriate external repsositories
   - stage: tag release
@@ -195,6 +190,7 @@ branches:
     - release-2.11
     - prerelease-2.12.0
     - /^v.*/
+    - bintray-publish
 
 notifications:
   irc:

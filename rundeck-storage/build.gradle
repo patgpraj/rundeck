@@ -49,7 +49,23 @@ project(':rundeck-storage:rundeck-storage-api') {
         key = findProperty("bintrayApiKey")
         publish = true
         dryRun = (findProperty('dryRun') ?: 'true').toBoolean()
-        configurations =  ['archives']
+
+        if (findProperty('bintrayUseExisting')) {
+            filesSpec {
+                from 'build/libs'
+                from 'build/poms'
+                into '.'
+                rename { file ->
+                    if (file =~ /^pom/)
+                        return "$project.name-${version}.pom"
+                    else
+                        return file
+                }
+            }
+        } else {
+            configurations =  ['archives']
+        }
+
         pkg {
             repo = 'maven'
             name = 'rundeck-storage-api'
@@ -76,7 +92,23 @@ project(':rundeck-storage:rundeck-storage-data') {
         key = findProperty("bintrayApiKey")
         publish = true
         dryRun = (findProperty('dryRun') ?: 'true').toBoolean()
-        configurations =  ['archives']
+
+        if (findProperty('bintrayUseExisting')) {
+            filesSpec {
+                from 'build/libs'
+                from 'build/poms'
+                into '.'
+                rename { file ->
+                    if (file =~ /^pom/)
+                        return "$project.name-${version}.pom"
+                    else
+                        return file
+                }
+            }
+        } else {
+            configurations =  ['archives']
+        }
+
         pkg {
             repo = 'maven'
             name = 'rundeck-storage-data'
@@ -102,7 +134,23 @@ project(':rundeck-storage:rundeck-storage-conf') {
         key = findProperty("bintrayApiKey")
         publish = true
         dryRun = (findProperty('dryRun') ?: 'true').toBoolean()
-        configurations =  ['archives']
+
+        if (findProperty('bintrayUseExisting')) {
+            filesSpec {
+                from 'build/libs'
+                from 'build/poms'
+                into '.'
+                rename { file ->
+                    if (file =~ /^pom/)
+                        return "$project.name-${version}.pom"
+                    else
+                        return file
+                }
+            }
+        } else {
+            configurations =  ['archives']
+        }
+
         pkg {
             repo = 'maven'
             name = 'rundeck-storage-conf'
@@ -130,7 +178,23 @@ project(':rundeck-storage:rundeck-storage-filesys') {
         key = findProperty("bintrayApiKey")
         publish = true
         dryRun = (findProperty('dryRun') ?: 'true').toBoolean()
-        configurations =  ['archives']
+
+        if (findProperty('bintrayUseExisting')) {
+            filesSpec {
+                from 'build/libs'
+                from 'build/poms'
+                into '.'
+                rename { file ->
+                    if (file =~ /^pom/)
+                        return "$project.name-${version}.pom"
+                    else
+                        return file
+                }
+            }
+        } else {
+            configurations =  ['archives']
+        }
+
         pkg {
             repo = 'maven'
             name = 'rundeck-storage-filesys'
@@ -146,4 +210,3 @@ project(':rundeck-storage:rundeck-storage-filesys') {
         }
     }
 }
-

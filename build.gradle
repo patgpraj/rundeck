@@ -254,7 +254,9 @@ exportedProjects.each {
             }
         }
 
-        task discoverExisting {
+        task copyExisting {
+            inputs.dir 'build/libs'
+            inputs.dir 'build/poms'
             outputs.dir 'build/existing'
 
             doLast {
@@ -268,7 +270,13 @@ exportedProjects.each {
                             return "$project.name-${version}.pom"
                     }
                 }
+            }
+        }
 
+        task discoverExisting {
+            dependsOn copyExisting
+
+            doLast {
                 file("build/existing").eachFile {f ->
                     artifacts {
                         existing f
