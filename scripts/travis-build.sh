@@ -8,6 +8,8 @@ if [[ ! -z "${RUNDECK_TAG:-}" ]] ; then
     ENV=release
 fi
 
-make ENV="${ENV}" rpm deb
+./gradlew -Penvironment="${ENV}" -x check install
 
 groovy testbuild.groovy --buildType="${ENV}"
+
+make ENV="${ENV}" rpm deb
