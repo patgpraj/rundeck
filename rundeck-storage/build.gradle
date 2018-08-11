@@ -54,10 +54,10 @@ project(':rundeck-storage:rundeck-storage-api') {
             filesSpec {
                 from 'build/libs'
                 from 'build/poms'
-                into '.'
+                into "${project.group}.rundeck-${project.name}".replace('.', '/')
                 rename { file ->
                     if (file =~ /^pom/)
-                        return "$project.name-${version}.pom"
+                        return "rundeck-$project.name-${version}.pom"
                     else
                         return file
                 }
@@ -76,6 +76,11 @@ project(':rundeck-storage:rundeck-storage-api') {
                     sync = true //[Default: true] Determines whether to sync the version to Maven Central.
                     user = findProperty('ossUserToken') //OSS user token: mandatory
                     password = findProperty('ossUserPassword') //OSS user password: mandatory
+                }
+
+                gpg {
+                    sign = true //Determines whether to GPG sign the files. The default is false
+                    passphrase = findProperty('signingPassword') //Optional. The passphrase for GPG signing'
                 }
             }
         }
@@ -97,10 +102,10 @@ project(':rundeck-storage:rundeck-storage-data') {
             filesSpec {
                 from 'build/libs'
                 from 'build/poms'
-                into '.'
+                into "${project.group}.rundeck-${project.name}".replace('.', '/')
                 rename { file ->
                     if (file =~ /^pom/)
-                        return "$project.name-${version}.pom"
+                        return "rundeck-$project.name-${version}.pom"
                     else
                         return file
                 }
@@ -119,6 +124,11 @@ project(':rundeck-storage:rundeck-storage-data') {
                     sync = true //[Default: true] Determines whether to sync the version to Maven Central.
                     user = findProperty('ossUserToken') //OSS user token: mandatory
                     password = findProperty('ossUserPassword') //OSS user password: mandatory
+                }
+
+                gpg {
+                    sign = true //Determines whether to GPG sign the files. The default is false
+                    passphrase = findProperty('signingPassword') //Optional. The passphrase for GPG signing'
                 }
             }
         }
@@ -139,10 +149,10 @@ project(':rundeck-storage:rundeck-storage-conf') {
             filesSpec {
                 from 'build/libs'
                 from 'build/poms'
-                into '.'
+                into "${project.group}.rundeck-${project.name}".replace('.', '/')
                 rename { file ->
                     if (file =~ /^pom/)
-                        return "$project.name-${version}.pom"
+                        return "rundeck-$project.name-${version}.pom"
                     else
                         return file
                 }
@@ -161,6 +171,11 @@ project(':rundeck-storage:rundeck-storage-conf') {
                     sync = true //[Default: true] Determines whether to sync the version to Maven Central.
                     user = findProperty('ossUserToken') //OSS user token: mandatory
                     password = findProperty('ossUserPassword') //OSS user password: mandatory
+                }
+
+                gpg {
+                    sign = true //Determines whether to GPG sign the files. The default is false
+                    passphrase = findProperty('signingPassword') //Optional. The passphrase for GPG signing'
                 }
             }
         }
@@ -183,10 +198,10 @@ project(':rundeck-storage:rundeck-storage-filesys') {
             filesSpec {
                 from 'build/libs'
                 from 'build/poms'
-                into '.'
+                into "${project.group}.rundeck-${project.name}".replace('.', '/')
                 rename { file ->
                     if (file =~ /^pom/)
-                        return "$project.name-${version}.pom"
+                        return "rundeck-$project.name-${version}.pom"
                     else
                         return file
                 }
@@ -205,6 +220,11 @@ project(':rundeck-storage:rundeck-storage-filesys') {
                     sync = true //[Default: true] Determines whether to sync the version to Maven Central.
                     user = findProperty('ossUserToken') //OSS user token: mandatory
                     password = findProperty('ossUserPassword') //OSS user password: mandatory
+                }
+
+                gpg {
+                    sign = true //Determines whether to GPG sign the files. The default is false
+                    passphrase = findProperty('signingPassword') //Optional. The passphrase for GPG signing'
                 }
             }
         }

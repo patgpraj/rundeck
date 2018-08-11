@@ -339,7 +339,7 @@ task alljavadoc(type: Javadoc) {
 gradle.taskGraph.whenReady { taskGraph ->
     def tasks = taskGraph.getAllTasks()
     tasks.each { task ->
-        if (task.name.startsWith('bintray') && ! exportedProjects.contains(task.project.path)) {
+        if (task.name == 'bintrayUpload' && ! exportedProjects.contains(task.project.path)) {
             task.enabled = false
         }
     }

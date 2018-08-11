@@ -319,10 +319,10 @@ bintray {
         filesSpec {
             from 'build/libs'
             from 'build/poms'
-            into '.'
+            into "${project.group}.rundeck-${project.name}".replace('.', '/')
             rename { file ->
                 if (file =~ /^pom/)
-                    return "$project.name-${version}.pom"
+                    return "rundeck-$project.name-${version}.pom"
                 else
                     return file
             }
@@ -337,10 +337,15 @@ bintray {
         userOrg = 'rundeck'
 
         version {
-            mavenCentralSync {
-                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
-                user = findProperty('ossUserToken') //OSS user token: mandatory
-                password = findProperty('ossUserPassword') //OSS user password: mandatory
+            // mavenCentralSync {
+            //     sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+            //     user = findProperty('ossUserToken') //OSS user token: mandatory
+            //     password = findProperty('ossUserPassword') //OSS user password: mandatory
+            // }
+
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = findProperty('signingPassword') //Optional. The passphrase for GPG signing'
             }
         }
     }
